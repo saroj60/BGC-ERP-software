@@ -16,7 +16,9 @@ const Login = () => {
         setLoading(true);
         setError('');
         try {
-            const response = await api.post('token/', { email, password });
+            const trimmedEmail = email.trim();
+            const trimmedPassword = password.trim();
+            const response = await api.post('token/', { email: trimmedEmail, password: trimmedPassword });
             localStorage.setItem('access_token', response.data.access);
             localStorage.setItem('refresh_token', response.data.refresh);
 
