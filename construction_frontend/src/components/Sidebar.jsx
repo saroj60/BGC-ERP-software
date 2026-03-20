@@ -96,40 +96,43 @@ const Sidebar = ({ isOpen, onClose }) => {
                 }}>
                 {/* Header */}
                 <div style={{
-                    padding: '2rem 1.5rem',
+                    padding: '1.5rem',
                     borderBottom: '1px solid #f8fafc',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                 }}>
                     <div>
                         <div style={{
-                            fontSize: '1.4rem',
+                            fontSize: '1.3rem',
                             fontWeight: '800',
                             color: 'var(--primary-color)',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '8px',
                             fontFamily: "'Outfit', sans-serif",
-                            letterSpacing: '-0.03em',
+                            letterSpacing: '-0.02em',
                         }}>
                             🏗️ <span style={{ color: 'var(--text-primary)' }}>Construction</span>OS
                         </div>
                         <div style={{
-                            marginTop: '6px',
-                            padding: '3px 8px',
-                            borderRadius: '12px',
-                            fontSize: '0.7rem',
+                            marginTop: '4px',
+                            padding: '2px 8px',
+                            borderRadius: '10px',
+                            fontSize: '0.65rem',
                             fontWeight: '600',
                             backgroundColor: 'var(--primary-light)',
                             color: 'var(--primary-color)',
                             display: 'inline-block',
                             textTransform: 'uppercase',
-                            letterSpacing: '0.05em',
                         }}>
                             {role ? role.replace('_', ' ') : 'Guest'}
                         </div>
                     </div>
-
+ 
                     {/* Mobile close button */}
                     <button
+                        className="mobile-close-btn"
                         onClick={onClose}
                         aria-label="Close menu"
                         style={{
@@ -145,7 +148,6 @@ const Sidebar = ({ isOpen, onClose }) => {
                             fontSize: '1rem',
                             color: 'var(--text-secondary)',
                             flexShrink: 0,
-                            // Only visible on mobile (where Layout passes onClose)
                             visibility: onClose ? 'visible' : 'hidden',
                         }}
                     >
@@ -223,6 +225,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                     #sidebar-panel {
                         transform: translateX(0) !important;
                         box-shadow: none !important;
+                    }
+                    .mobile-close-btn {
+                        display: none !important;
                     }
                 }
                 /* Mobile: hidden by default, open when .sidebar-open */
