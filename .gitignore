@@ -124,6 +124,15 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+venv_standard/
+construction_backend/venv_standard/
+construction_backend/media/
+reset_admin.py
+repro_add_project.py
+verify_erp_health.py
+create_pm.py
+debug_materials.py
+check_user.py
 
 # Spyder project settings
 .spyderproject

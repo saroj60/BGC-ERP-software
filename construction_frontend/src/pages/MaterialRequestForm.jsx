@@ -42,7 +42,7 @@ const MaterialRequestForm = () => {
         setError('');
 
         try {
-            await api.post('materials/', formData);
+            await api.post('materials/requests/', formData);
             alert('Material Request Submitted Successfully!');
             navigate('/dashboard');
         } catch (err) {
@@ -54,59 +54,61 @@ const MaterialRequestForm = () => {
     };
 
     return (
-        <div style={{ maxWidth: '600px', margin: '2rem auto', padding: '2rem' }}>
-            <div className="glass-card" style={{ padding: '2rem' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '2rem', color: 'var(--primary-color)' }}>
-                    📦 Request Materials
-                </h2>
+        <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '0 auto', paddingBottom: '4rem' }}>
+            <header style={{ marginBottom: '2.5rem' }}>
+                <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                    Request Materials
+                </h1>
+                <p style={{ color: 'var(--text-secondary)' }}>
+                    Specify the materials required for your current project site.
+                </p>
+            </header>
 
-                {error && (
-                    <div style={{ padding: '10px', background: '#fee2e2', color: '#dc2626', borderRadius: '8px', marginBottom: '1rem' }}>
-                        {error}
-                    </div>
-                )}
+            {error && (
+                <div style={{
+                    padding: '1rem 1.5rem', marginBottom: '2rem', borderRadius: '12px',
+                    background: '#fef2f2', color: '#dc2626', border: '1px solid #fee2e2',
+                    fontSize: '0.9rem', fontWeight: '500'
+                }}>
+                    ⚠️ {error}
+                </div>
+            )}
 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Project</label>
+            <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '3rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <div className="form-group">
+                        <label className="form-label">Select Project</label>
                         <select
                             name="project"
                             value={formData.project}
                             onChange={handleChange}
                             required
                             disabled={localStorage.getItem('user_role') === 'SITE_ENGINEER'}
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '8px',
-                                border: '1px solid #e2e8f0',
-                                backgroundColor: localStorage.getItem('user_role') === 'SITE_ENGINEER' ? '#f3f4f6' : 'white',
-                                cursor: localStorage.getItem('user_role') === 'SITE_ENGINEER' ? 'not-allowed' : 'pointer'
-                            }}
+                            className="form-control"
                         >
-                            <option value="">Select Project</option>
+                            <option value="">Choose Project...</option>
                             {projects.map(p => (
                                 <option key={p.id} value={p.id}>{p.name}</option>
                             ))}
                         </select>
                     </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Material Name</label>
+                    <div className="form-group">
+                        <label className="form-label">Material Name</label>
                         <input
                             type="text"
                             name="material_name"
-                            placeholder="e.g. Cement, Bricks"
+                            placeholder="e.g. Portland Cement, Red Bricks"
                             value={formData.material_name}
                             onChange={handleChange}
                             required
-                            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                            className="form-control"
                         />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Quantity</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="form-group">
+                            <label className="form-label">Quantity</label>
                             <input
                                 type="number"
                                 name="quantity"
@@ -115,16 +117,17 @@ const MaterialRequestForm = () => {
                                 required
                                 min="0.1"
                                 step="0.1"
-                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                                className="form-control"
+                                placeholder="0.0"
                             />
                         </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Unit</label>
+                        <div className="form-group">
+                            <label className="form-label">Measurement Unit</label>
                             <select
                                 name="unit"
                                 value={formData.unit}
                                 onChange={handleChange}
-                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                                className="form-control"
                             >
                                 <option value="PCS">PCS</option>
                                 <option value="KG">KG</option>
@@ -136,25 +139,25 @@ const MaterialRequestForm = () => {
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Required Date</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="form-group">
+                            <label className="form-label">Required By Date</label>
                             <input
                                 type="date"
                                 name="required_date"
                                 value={formData.required_date}
                                 onChange={handleChange}
                                 required
-                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                                className="form-control"
                             />
                         </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Priority</label>
+                        <div className="form-group">
+                            <label className="form-label">Priority Level</label>
                             <select
                                 name="priority"
                                 value={formData.priority}
                                 onChange={handleChange}
-                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                                className="form-control"
                             >
                                 <option value="LOW">Low</option>
                                 <option value="MEDIUM">Medium</option>
@@ -163,17 +166,17 @@ const MaterialRequestForm = () => {
                             </select>
                         </div>
                     </div>
+                </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn-primary"
-                        style={{ padding: '14px', borderRadius: '8px', fontSize: '1rem', marginTop: '1rem' }}
-                    >
-                        {loading ? 'Sending Request...' : 'Send Request'}
+                <div style={{ marginTop: '3rem', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                    <button type="button" onClick={() => navigate('/dashboard')} className="btn btn-secondary">
+                        Discard
                     </button>
-                </form>
-            </div>
+                    <button type="submit" className="btn btn-primary" disabled={loading} style={{ minWidth: '180px' }}>
+                        {loading ? 'Submitting...' : 'Send Request'}
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };

@@ -5,8 +5,10 @@ import api from '../api/axios';
 const ExpenseForm = () => {
     const navigate = useNavigate();
     const [projects, setProjects] = useState([]);
+    const [vehicles, setVehicles] = useState([]);
     const [formData, setFormData] = useState({
         project: '',
+        vehicle: '',
         category: '',
         description: '',
         amount: '',
@@ -19,6 +21,14 @@ const ExpenseForm = () => {
         fetchProjects();
     }, []);
 
+    useEffect(() => {
+        if (formData.project) {
+            fetchVehicles(formData.project);
+        } else {
+            setVehicles([]);
+        }
+    }, [formData.project]);
+
     const fetchProjects = async () => {
         try {
             const response = await api.get('projects/');
@@ -28,6 +38,15 @@ const ExpenseForm = () => {
             }
         } catch (err) {
             setError('Failed to fetch projects');
+        }
+    };
+
+    const fetchVehicles = async (projectId) => {
+        try {
+            const response = await api.get(`vehicles/?project=${projectId}`);
+            setVehicles(response.data);
+        } catch (err) {
+            console.error('Failed to fetch vehicles');
         }
     };
 
@@ -55,58 +74,68 @@ const ExpenseForm = () => {
     ];
 
     return (
-        <div className="animate-fade-in" style={{ maxWidth: '640px', margin: '0 auto' }}>
-            {/* Header */}
-            <div style={{ marginBottom: '2rem' }}>
-                <Link to="/expenses" className="btn btn-secondary btn-sm" style={{ marginBottom: '1rem', display: 'inline-flex' }}>
-                    ← Back to Expenses
-                </Link>
-                <h2 style={{ fontSize: '1.8rem', marginBottom: '0.4rem', color: 'var(--text-primary)', marginTop: '0.5rem' }}>
-                    💰 Add New Expense
-                </h2>
-                <p style={{ color: 'var(--text-secondary)', margin: 0 }}>Log an expenditure against a project.</p>
-            </div>
+        <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '0 auto', paddingBottom: '4rem' }}>
+            <header style={{ marginBottom: '2.5rem' }}>
+                <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                    Log New Expense
+                </h1>
+                <p style={{ color: 'var(--text-secondary)' }}>
+                    Record expenditures and associate them with projects or equipment.
+                </p>
+            </header>
 
             {error && (
-                <div style={{ padding: '0.9rem 1.2rem', background: '#fef2f2', color: '#dc2626', borderRadius: '10px', marginBottom: '1.5rem', border: '1px solid #fecaca', fontWeight: 500 }}>
+                <div style={{
+                    padding: '1rem 1.5rem', marginBottom: '2rem', borderRadius: '12px',
+                    background: '#fef2f2', color: '#dc2626', border: '1px solid #fee2e2',
+                    fontSize: '0.9rem', fontWeight: '500'
+                }}>
                     ⚠️ {error}
                 </div>
             )}
 
-            <div className="glass-card" style={{ padding: '2rem' }}>
-                <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '3rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     <div className="form-group">
-                        <label className="form-label">Project</label>
+                        <label className="form-label">Associated Project</label>
                         <select name="project" value={formData.project} onChange={handleChange} required className="form-control">
-                            <option value="">Select Project</option>
+                            <option value="">Choose Project...</option>
                             {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                         </select>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="form-group">
+                        <label className="form-label">Related Vehicle / Asset (Optional)</label>
+                        <select name="vehicle" value={formData.vehicle} onChange={handleChange} className="form-control">
+                            <option value="">General Expenditure</option>
+                            {vehicles.map(v => <option key={v.id} value={v.id}>{v.name} ({v.number})</option>)}
+                        </select>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                         <div className="form-group">
-                            <label className="form-label">Category</label>
+                            <label className="form-label">Expense Category</label>
                             <select name="category" value={formData.category} onChange={handleChange} required className="form-control">
                                 <option value="">Select Category</option>
                                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                             </select>
                         </div>
                         <div className="form-group">
-                            <label className="form-label">Date</label>
+                            <label className="form-label">Receipt Date</label>
                             <input type="date" name="expense_date" value={formData.expense_date} onChange={handleChange} required className="form-control" />
                         </div>
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Amount (₨)</label>
+                        <label className="form-label">Total Amount (Rs.)</label>
                         <input type="number" name="amount" step="0.01" min="0" placeholder="0.00" value={formData.amount} onChange={handleChange} required className="form-control" />
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Description</label>
+                        <label className="form-label">Brief Description</label>
                         <textarea
                             name="description"
-                            placeholder="Details about this expense..."
+                            placeholder="Provide details about this expenditure..."
                             value={formData.description}
                             onChange={handleChange}
                             required
@@ -115,17 +144,17 @@ const ExpenseForm = () => {
                             style={{ fontFamily: 'inherit', resize: 'vertical' }}
                         />
                     </div>
+                </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn btn-primary btn-lg btn-block"
-                        style={{ marginTop: '0.5rem' }}
-                    >
-                        {loading ? '⏳ Saving...' : '💾 Add Expense'}
+                <div style={{ marginTop: '3rem', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                    <button type="button" onClick={() => navigate('/expenses')} className="btn btn-secondary">
+                        Back to List
                     </button>
-                </form>
-            </div>
+                    <button type="submit" className="btn btn-primary" disabled={loading} style={{ minWidth: '180px' }}>
+                        {loading ? 'Processing...' : 'Save Expense'}
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };

@@ -1,9 +1,11 @@
 from django.db import models
 from projects.models import Project
 from accounts.models import User
+from vehicles.models import Vehicle
 
 class Expense(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='expenses')
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True, related_name='expenses')
     category = models.CharField(max_length=100)
     description = models.TextField()
     amount = models.DecimalField(max_digits=12, decimal_places=2)

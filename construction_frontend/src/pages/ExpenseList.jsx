@@ -97,6 +97,7 @@ const ExpenseList = () => {
                                 <tr>
                                     <th style={{ whiteSpace: 'nowrap' }}>Date</th>
                                     <th>Category</th>
+                                    <th>Vehicle</th>
                                     <th style={{ minWidth: '140px' }}>Description</th>
                                     <th style={{ whiteSpace: 'nowrap' }}>Amount (₨)</th>
                                     <th style={{ whiteSpace: 'nowrap' }}>Added By</th>
@@ -108,6 +109,7 @@ const ExpenseList = () => {
                                     <tr key={exp.id}>
                                         <td style={{ whiteSpace: 'nowrap' }}>{exp.expense_date}</td>
                                         <td><span className="badge badge-info">{exp.category}</span></td>
+                                        <td>{exp.vehicle_details ? `${exp.vehicle_details.name} (${exp.vehicle_details.number})` : '—'}</td>
                                         <td>{exp.description}</td>
                                         <td style={{ fontWeight: 700, color: 'var(--danger-color)', whiteSpace: 'nowrap' }}>₨{parseFloat(exp.amount).toLocaleString()}</td>
                                         <td style={{ whiteSpace: 'nowrap' }}>{exp.created_by}</td>

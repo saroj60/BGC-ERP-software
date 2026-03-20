@@ -94,105 +94,106 @@ const VehicleForm = () => {
     };
 
     return (
-        <div className="glass-panel" style={{ padding: '2.5rem', maxWidth: '600px', margin: '2rem auto', borderRadius: '16px' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '2rem', color: 'var(--primary-color)' }}>
-                {isEditMode ? '🚜 Edit Vehicle' : '🚜 Add New Vehicle'}
-            </h2>
+        <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '0 auto', paddingBottom: '4rem' }}>
+            <header style={{ marginBottom: '2.5rem' }}>
+                <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                    {isEditMode ? 'Edit Vehicle' : 'Register New Vehicle'}
+                </h1>
+                <p style={{ color: 'var(--text-secondary)' }}>
+                    {isEditMode ? 'Update asset details and project assignments.' : 'Add a new piece of equipment or vehicle to the fleet.'}
+                </p>
+            </header>
 
             {error && (
-                <div style={{ background: '#fef2f2', color: '#dc2626', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
-                    {error}
+                <div style={{
+                    padding: '1rem 1.5rem', marginBottom: '2rem', borderRadius: '12px',
+                    background: '#fef2f2', color: '#dc2626', border: '1px solid #fee2e2',
+                    fontSize: '0.9rem', fontWeight: '500'
+                }}>
+                    ⚠️ {error}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                        Vehicle Name / Model
-                    </label>
-                    <input
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        placeholder="e.g. JCB 3DX Excavator"
-                    />
-                </div>
-
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                        Registration Number
-                    </label>
-                    <input
-                        name="number"
-                        value={formData.number}
-                        onChange={handleChange}
-                        required
-                        placeholder="e.g. BA 2 PA 1234"
-                    />
-                </div>
-
-                <div className="dashboard-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                            Status
-                        </label>
-                        <select name="status" value={formData.status} onChange={handleChange}>
-                            <option value="AVAILABLE">Available</option>
-                            <option value="IN_USE">In Use</option>
-                            <option value="MAINTENANCE">Maintenance</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                            Assign to Project
-                        </label>
-                        <select name="project" value={formData.project} onChange={handleChange}>
-                            <option value="">-- No Assignment --</option>
-                            {projects.map(p => (
-                                <option key={p.id} value={p.id}>{p.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                        Vehicle Photo
-                    </label>
-                    <div style={{ padding: '1rem', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                        {existingPhoto && !formData.photo && (
-                            <div style={{ marginBottom: '10px' }}>
-                                <img src={existingPhoto} alt="Current" style={{ width: '100px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
-                                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Current Photo</div>
-                            </div>
-                        )}
+            <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '3rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <div className="form-group">
+                        <label className="form-label">Vehicle / Model Name</label>
                         <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{
-                                display: 'block',
-                                width: '100%',
-                                padding: '10px',
-                                cursor: 'pointer'
-                            }}
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                            placeholder="e.g. Caterpillar 320 GC Excavator"
+                            className="form-control"
                         />
-                        {formData.photo && (
-                            <div style={{ marginTop: '10px', fontSize: '0.9rem', color: '#10b981' }}>
-                                ✅ New File Selected: {formData.photo.name}
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Registration / Plate Number</label>
+                        <input
+                            name="number"
+                            value={formData.number}
+                            onChange={handleChange}
+                            required
+                            placeholder="e.g. KO 1 PA 4567"
+                            className="form-control"
+                        />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="form-group">
+                            <label className="form-label">Current Status</label>
+                            <select name="status" value={formData.status} onChange={handleChange} className="form-control">
+                                <option value="AVAILABLE">Available</option>
+                                <option value="IN_USE">In Use</option>
+                                <option value="MAINTENANCE">Maintenance</option>
+                                <option value="RETIRED">Retired</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">Assign to Project</label>
+                            <select name="project" value={formData.project} onChange={handleChange} className="form-control">
+                                <option value="">Fleet Reserve (Unassigned)</option>
+                                {projects.map(p => (
+                                    <option key={p.id} value={p.id}>{p.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Equipment Photograph</label>
+                        <div style={{ 
+                            padding: '1.5rem', background: '#f8fafc', borderRadius: '12px', 
+                            border: '1px solid #eef2f6', display: 'flex', gap: '20px', alignItems: 'center' 
+                        }}>
+                            {existingPhoto && !formData.photo && (
+                                <img src={existingPhoto} alt="Asset" style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                            )}
+                            <div style={{ flex: 1 }}>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    style={{ fontSize: '0.85rem' }}
+                                />
+                                {formData.photo && (
+                                    <p style={{ marginTop: '8px', fontSize: '0.8rem', color: 'var(--success-color)', fontWeight: '600' }}>
+                                        ✓ {formData.photo.name}
+                                    </p>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                    <button type="button" onClick={() => navigate('/vehicles')} className="btn-secondary" style={{ flex: 1 }}>
-                        Cancel
+                <div style={{ marginTop: '3rem', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                    <button type="button" onClick={() => navigate('/vehicles')} className="btn btn-secondary">
+                        Back to Fleet
                     </button>
-                    <button type="submit" className="btn-primary" disabled={loading} style={{ flex: 2 }}>
-                        {loading ? 'Saving...' : (isEditMode ? 'Update Vehicle' : 'Add Vehicle')}
+                    <button type="submit" className="btn btn-primary" disabled={loading} style={{ minWidth: '160px' }}>
+                        {loading ? 'Processing...' : (isEditMode ? 'Update Asset' : 'Register Asset')}
                     </button>
                 </div>
             </form>

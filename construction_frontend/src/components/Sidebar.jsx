@@ -21,32 +21,59 @@ const Sidebar = ({ isOpen, onClose }) => {
         if (onClose) onClose();
     };
 
-    const navItems = [
+    const mainItems = [
         { name: 'Dashboard', path: '/dashboard', icon: '📊' },
         { name: 'Projects', path: '/projects', icon: '🏗️' },
     ];
 
+    const operationsItems = [];
     if (role === 'ADMIN' || role === 'PROJECT_MANAGER' || role === 'SITE_ENGINEER') {
-        navItems.push({ name: 'Tasks', path: '/tasks', icon: '📝' });
-        navItems.push({ name: 'Daily Reports', path: '/reports', icon: '📄' });
-        navItems.push({ name: 'Materials', path: '/materials', icon: '🧱' });
-        navItems.push({ name: 'Attendance', path: '/attendance', icon: '📋' });
-        navItems.push({ name: 'Workers', path: '/workers', icon: '👷' });
-        navItems.push({ name: 'Vehicles', path: '/vehicles', icon: '🚜' });
+        operationsItems.push({ name: 'Daily Reports', path: '/reports', icon: '📄' });
+        operationsItems.push({ name: 'Tasks', path: '/tasks', icon: '📝' });
+        operationsItems.push({ name: 'Attendance', path: '/attendance', icon: '📋' });
     }
 
+    const resourceItems = [];
+    if (role === 'ADMIN' || role === 'PROJECT_MANAGER' || role === 'SITE_ENGINEER') {
+        resourceItems.push({ name: 'Materials', path: '/materials', icon: '🧱' });
+        resourceItems.push({ name: 'Workers', path: '/workers', icon: '👷' });
+        resourceItems.push({ name: 'Vehicles', path: '/vehicles', icon: '🚜' });
+    }
+
+    const managementItems = [];
     if (role === 'PROJECT_MANAGER' || role === 'ADMIN') {
-        navItems.push({ name: 'Tenders & Bids', path: '/tenders', icon: '⚖️' });
-        navItems.push({ name: 'Expenses', path: '/expenses', icon: '💰' });
-        navItems.push({ name: 'Material Approvals', path: '/materials/approvals', icon: '✅' });
-        navItems.push({ name: 'Analytics', path: '/analytics', icon: '📊' });
-        navItems.push({ name: 'HR Hub', path: '/hr', icon: '💼' });
+        managementItems.push({ name: 'Tenders & Bids', path: '/tenders', icon: '⚖️' });
+        managementItems.push({ name: 'Expenses', path: '/expenses', icon: '💰' });
+        managementItems.push({ name: 'Material Approvals', path: '/materials/approvals', icon: '✅' });
+        managementItems.push({ name: 'Analytics', path: '/analytics', icon: '📊' });
     }
 
+    const adminItems = [];
     if (role === 'ADMIN') {
-        navItems.push({ name: 'Employees', path: '/users', icon: '👥' });
-        navItems.push({ name: 'Inventory', path: '/inventory', icon: '📦' });
+        adminItems.push({ name: 'Employees', path: '/users', icon: '👥' });
+        adminItems.push({ name: 'Inventory', path: '/inventory', icon: '📦' });
+        adminItems.push({ name: 'HR Hub', path: '/hr', icon: '💼' });
     }
+
+    const renderNavGroup = (title, items) => {
+        if (items.length === 0) return null;
+        return (
+            <>
+                <div className="nav-section-title">{title}</div>
+                {items.map((item) => (
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        onClick={handleNavClick}
+                        className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                    >
+                        <span className="nav-icon">{item.icon}</span>
+                        {item.name}
+                    </NavLink>
+                ))}
+            </>
+        );
+    };
 
     return (
         <>
@@ -63,31 +90,27 @@ const Sidebar = ({ isOpen, onClose }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     zIndex: 150,
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    borderRight: '1px solid rgba(226, 232, 240, 0.8)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
+                    backgroundColor: '#ffffff',
+                    borderRight: '1px solid #eef2f6',
                     transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}>
                 {/* Header */}
                 <div style={{
-                    padding: '1.5rem',
-                    borderBottom: '1px solid rgba(0,0,0,0.03)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    padding: '2rem 1.5rem',
+                    borderBottom: '1px solid #f8fafc',
                 }}>
                     <div>
                         <div style={{
-                            fontSize: '1.3rem',
-                            fontWeight: '700',
+                            fontSize: '1.4rem',
+                            fontWeight: '800',
                             color: 'var(--primary-color)',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '8px',
                             fontFamily: "'Outfit', sans-serif",
+                            letterSpacing: '-0.03em',
                         }}>
-                            <span>🏗️</span> ConstructionOS
+                            🏗️ <span style={{ color: 'var(--text-primary)' }}>Construction</span>OS
                         </div>
                         <div style={{
                             marginTop: '6px',
@@ -131,40 +154,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Nav items */}
-                <nav style={{
-                    flex: 1,
-                    padding: '1rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '2px',
-                    overflowY: 'auto',
-                    overscrollBehavior: 'contain',
-                }}>
-                    {navItems.map((item) => (
-                        <NavLink
-                            key={item.path}
-                            to={item.path}
-                            onClick={handleNavClick}
-                            style={({ isActive }) => ({
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '12px',
-                                padding: '11px 14px',
-                                borderRadius: '10px',
-                                textDecoration: 'none',
-                                color: isActive ? 'var(--primary-color)' : 'var(--text-secondary)',
-                                fontWeight: isActive ? '600' : '500',
-                                fontSize: '0.9rem',
-                                backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
-                                transition: 'all 0.15s',
-                                // Larger touch targets on mobile
-                                minHeight: '44px',
-                            })}
-                        >
-                            <span style={{ fontSize: '1.15rem', flexShrink: 0 }}>{item.icon}</span>
-                            {item.name}
-                        </NavLink>
-                    ))}
+                <nav style={{ flex: 1, padding: '1rem', overflowY: 'auto' }}>
+                    {renderNavGroup('Overview', mainItems)}
+                    {renderNavGroup('Operations', operationsItems)}
+                    {renderNavGroup('Resources', resourceItems)}
+                    {renderNavGroup('Management', managementItems)}
+                    {renderNavGroup('Administration', adminItems)}
                 </nav>
 
                 {/* Footer / profile */}

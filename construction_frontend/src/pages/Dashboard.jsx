@@ -68,97 +68,101 @@ const Dashboard = () => {
     );
 
     return (
-        <div className="animate-fade-in">
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 className="text-2xl font-bold text-primary">
-                    Welcome back, {role ? role.charAt(0) + role.slice(1).toLowerCase().replace('_', ' ') : 'User'} 👋
-                </h1>
-                <p className="text-secondary">Overview of all active construction sites and resources.</p>
+        <div className="animate-fade-in" style={{ paddingBottom: '3rem' }}>
+            <header style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div>
+                    <h1 style={{ fontSize: '2.2rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                        Dashboard
+                    </h1>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
+                        Welcome back! Here's what's happening across your projects today.
+                    </p>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <button className="btn btn-secondary btn-sm">Generate Report</button>
+                    <button className="btn btn-primary btn-sm">+ New Project</button>
+                </div>
+            </header>
+
+            {/* Quick Stats Grid */}
+            <div className="dashboard-grid" style={{ marginBottom: '2rem' }}>
+                <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#f5f7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>🏗️</div>
+                    <div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '4px' }}>Projects</div>
+                        <div style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--text-primary)', lineHeight: 1 }}>{stats.total_projects}</div>
+                    </div>
+                </div>
+
+                <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>📝</div>
+                    <div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '4px' }}>Reports (Today)</div>
+                        <div style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--text-primary)', lineHeight: 1 }}>{stats.todays_reports}</div>
+                    </div>
+                </div>
+
+                <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#fffbeb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>⚠️</div>
+                    <div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '4px' }}>Pending Requests</div>
+                        <div style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--text-primary)', lineHeight: 1 }}>{stats.pending_material_requests}</div>
+                    </div>
+                </div>
             </div>
 
-            <div className="dashboard-grid" style={{ marginBottom: '2rem' }}>
-                {/* Stats Cards */}
-                <div className="glass-card flex items-center gap-4" style={{ padding: '1.5rem' }}>
-                    <div style={{
-                        background: 'var(--primary-light)', color: 'var(--primary-color)',
-                        padding: '12px', borderRadius: '12px', fontSize: '1.5rem'
-                    }}>🏗️</div>
-                    <div>
-                        <div className="text-sm text-secondary">Total Projects</div>
-                        <div className="text-2xl font-bold text-primary">{stats.total_projects}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+                {/* Main Analytics Chart */}
+                <div className="glass-card" style={{ padding: '2rem' }}>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        📊 Activity Trends
+                    </h3>
+                    <div style={{ height: '350px' }}>
+                        <Bar data={chartData} options={chartOptions} />
                     </div>
                 </div>
 
-                <div className="glass-card flex items-center gap-4" style={{ padding: '1.5rem' }}>
-                    <div style={{
-                        background: '#dcfce7', color: '#16a34a',
-                        padding: '12px', borderRadius: '12px', fontSize: '1.5rem'
-                    }}>📝</div>
-                    <div>
-                        <div className="text-sm text-secondary">Reports Today</div>
-                        <div className="text-2xl font-bold text-primary">{stats.todays_reports}</div>
-                    </div>
-                </div>
-
-                <div className="glass-card flex items-center gap-4" style={{ padding: '1.5rem' }}>
-                    <div style={{
-                        background: '#fef3c7', color: '#d97706',
-                        padding: '12px', borderRadius: '12px', fontSize: '1.5rem'
-                    }}>⚠️</div>
-                    <div>
-                        <div className="text-sm text-secondary">Pending Requests</div>
-                        <div className="text-2xl font-bold text-primary">{stats.pending_material_requests}</div>
-                    </div>
-                </div>
-
+                {/* Side Widget: Expenses */}
                 {role !== 'SITE_ENGINEER' && (
-                    <div className="glass-card" style={{ padding: '1.5rem', gridRow: 'span 2' }}>
-                        <h3 className="text-lg font-bold text-primary flex items-center gap-2" style={{ marginBottom: '1rem' }}>
-                            💰 Project Expenses
+                    <div className="glass-card" style={{ padding: '2rem' }}>
+                        <h3 style={{ fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            💰 Project Budgets
                         </h3>
                         {stats.project_expenses.length === 0 ? (
-                            <p className="text-secondary" style={{ fontStyle: 'italic', padding: '1rem', textAlign: 'center' }}>No expenses recorded yet.</p>
+                            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-light)' }}>
+                                No expense data available
+                            </div>
                         ) : (
-                            <div className="flex flex-col gap-4" style={{ maxHeight: '300px', overflowY: 'auto', paddingRight: '8px' }}>
-                                {stats.project_expenses.map((proj) => {
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                {stats.project_expenses.slice(0, 5).map((proj) => {
                                     const expense = parseFloat(proj.total_expense || 0);
                                     const budget = parseFloat(proj.budget || 0);
                                     const percent = budget > 0 ? Math.min((expense / budget) * 100, 100) : 0;
-                                    let color = 'var(--success-color)';
-                                    if (percent > 75) color = 'var(--warning-color)';
-                                    if (percent > 90) color = 'var(--danger-color)';
-
+                                    
                                     return (
-                                        <div key={proj.id} style={{ paddingBottom: '12px', borderBottom: '1px solid #f1f5f9' }}>
-                                            <div className="flex justify-between" style={{ marginBottom: '6px' }}>
-                                                <span className="font-medium text-primary text-sm">{proj.name}</span>
-                                                <span className="text-sm text-secondary">
-                                                    <span className="font-bold text-primary">Rs. {expense.toLocaleString()}</span>
-                                                    {' / '}
-                                                    <span style={{ fontSize: '0.8em' }}>{budget > 0 ? `Rs. ${budget.toLocaleString()}` : 'No Budget'}</span>
-                                                </span>
+                                        <div key={proj.id}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem' }}>
+                                                <span style={{ fontWeight: '600' }}>{proj.name}</span>
+                                                <span style={{ color: 'var(--text-secondary)' }}>{Math.round(percent)}%</span>
                                             </div>
-                                            {budget > 0 && (
-                                                <div style={{ width: '100%', height: '6px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                                                    <div style={{ width: `${percent}%`, height: '100%', background: color, transition: 'width 0.8s ease-out' }} />
-                                                </div>
-                                            )}
+                                            <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+                                                <div style={{ 
+                                                    width: `${percent}%`, 
+                                                    height: '100%', 
+                                                    background: percent > 90 ? 'var(--danger-color)' : 'var(--primary-color)',
+                                                    borderRadius: '4px'
+                                                }} />
+                                            </div>
                                         </div>
                                     );
                                 })}
                             </div>
                         )}
+                        <button className="btn btn-ghost btn-block btn-sm" style={{ marginTop: '2rem' }}>View All Expenses</button>
                     </div>
                 )}
             </div>
-
-            <div className="glass-card" style={{ padding: '2rem' }}>
-                <h3 className="text-lg font-bold text-primary" style={{ marginBottom: '1.5rem' }}>Activity Summary</h3>
-                <div style={{ height: '300px' }}>
-                    <Bar data={chartData} options={chartOptions} />
-                </div>
-            </div>
-        </div >
+        </div>
     );
 };
 

@@ -55,6 +55,11 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         if project_id:
             queryset = queryset.filter(project_id=project_id)
         
+        # Optional filtering by vehicle
+        vehicle_id = self.request.query_params.get('vehicle')
+        if vehicle_id:
+            queryset = queryset.filter(vehicle_id=vehicle_id)
+        
         return queryset
 
     def perform_create(self, serializer):

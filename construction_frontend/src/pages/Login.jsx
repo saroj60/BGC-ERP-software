@@ -38,81 +38,48 @@ const Login = () => {
 
     return (
         <div style={{
-            minHeight: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1rem',
-            position: 'relative',
-            backgroundImage: `url(${loginBg})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
+            minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '1.5rem', position: 'relative',
+            backgroundImage: `url(${loginBg})`, backgroundSize: 'cover', backgroundPosition: 'center',
         }}>
-            {/* Overlay */}
             <div style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundColor: 'rgba(15, 23, 42, 0.55)',
-                backdropFilter: 'blur(6px)',
-                zIndex: 0,
+                position: 'absolute', inset: 0,
+                backgroundColor: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(8px)', zIndex: 0,
             }} />
 
-            {/* Login card */}
-            <div className="glass-panel animate-fade-in login-card-mobile" style={{
-                padding: '2.5rem',
-                borderRadius: '20px',
-                width: '100%',
-                maxWidth: '420px',
-                position: 'relative',
-                zIndex: 10,
-                border: '1px solid rgba(255,255,255,0.5)',
-                boxShadow: '0 24px 48px rgba(0,0,0,0.18)',
+            <div className="glass-panel animate-fade-in" style={{
+                padding: '3rem', borderRadius: '24px', width: '100%', maxWidth: '440px',
+                position: 'relative', zIndex: 10, border: '1px solid rgba(255,255,255,0.4)',
+                boxShadow: 'var(--shadow-premium)',
             }}>
-                {/* Brand */}
-                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
                     <div style={{
-                        width: '64px', height: '64px',
-                        background: 'linear-gradient(135deg, #4f46e5, #6366f1)',
-                        borderRadius: '16px',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '2rem',
-                        margin: '0 auto 1rem',
-                        boxShadow: '0 8px 20px rgba(79,70,229,0.35)',
+                        width: '72px', height: '72px',
+                        background: 'linear-gradient(135deg, var(--primary-color), var(--primary-soft))',
+                        borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '2.5rem', margin: '0 auto 1.5rem',
+                        boxShadow: '0 12px 24px rgba(79, 70, 229, 0.3)',
                     }}>🏗️</div>
-                    <h2 style={{
-                        fontSize: '1.75rem',
-                        fontWeight: '700',
-                        color: 'var(--primary-color)',
-                        marginBottom: '0.4rem',
-                        fontFamily: "'Outfit', sans-serif",
-                    }}>Welcome Back</h2>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
-                        Sign in to manage your construction sites.
+                    <h1 style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                        ConstructionOS
+                    </h1>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                        Professional Construction Management
                     </p>
                 </div>
 
-                {/* Error */}
                 {error && (
                     <div style={{
-                        display: 'block',
-                        padding: '12px 16px',
-                        marginBottom: '1.25rem',
-                        textAlign: 'center',
-                        fontSize: '0.88rem',
-                        borderRadius: 'var(--radius-md)',
-                        background: '#fee2e2',
-                        color: '#dc2626',
-                        border: '1px solid #fecaca',
-                        fontWeight: 500,
+                        padding: '12px 16px', marginBottom: '1.5rem', textAlign: 'center',
+                        fontSize: '0.9rem', borderRadius: '10px', background: '#fef2f2',
+                        color: '#dc2626', border: '1px solid #fee2e2', fontWeight: '500'
                     }}>
-                        ⚠️ {error}
+                        {error}
                     </div>
                 )}
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-                    <div>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
                         <label className="form-label">Email Address</label>
                         <input
                             type="email"
@@ -121,13 +88,10 @@ const Login = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             placeholder="name@company.com"
-                            autoComplete="email"
-                            inputMode="email"
-                            style={{ fontSize: '16px' }}
                         />
                     </div>
 
-                    <div>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
                         <label className="form-label">Password</label>
                         <div style={{ position: 'relative' }}>
                             <input
@@ -137,8 +101,7 @@ const Login = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 placeholder="••••••••"
-                                autoComplete="current-password"
-                                style={{ fontSize: '16px', paddingRight: '3rem' }}
+                                style={{ paddingRight: '3.5rem' }}
                             />
                             <button
                                 type="button"
@@ -146,10 +109,8 @@ const Login = () => {
                                 style={{
                                     position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
                                     background: 'none', border: 'none', cursor: 'pointer',
-                                    color: 'var(--text-secondary)', fontSize: '1.1rem', padding: '4px',
-                                    display: 'flex', alignItems: 'center',
+                                    color: 'var(--text-light)', fontSize: '1.2rem', padding: '8px'
                                 }}
-                                aria-label={showPassword ? 'Hide password' : 'Show password'}
                             >
                                 {showPassword ? '🙈' : '👁️'}
                             </button>
@@ -158,29 +119,22 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="btn btn-primary btn-block"
+                        className="btn btn-primary btn-block btn-lg"
                         disabled={loading}
-                        style={{ marginTop: '0.5rem', minHeight: '48px', fontSize: '1rem' }}
+                        style={{ marginTop: '0.5rem' }}
                     >
-                        {loading ? '⏳ Authenticating...' : '🔐 Sign In'}
+                        {loading ? 'Authenticating...' : 'Sign In'}
                     </button>
                 </form>
 
-                <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                    Having trouble?{' '}
-                    <span style={{ color: 'var(--primary-color)', fontWeight: '600', cursor: 'pointer' }}>
-                        Contact Admin
-                    </span>
+                <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-light)' }}>
+                    Protected by Enterprise-grade Security
                 </div>
             </div>
 
-            {/* Responsive padding tweak for very small screens */}
             <style>{`
-                @media (max-width: 400px) {
-                    .login-card-mobile {
-                        padding: 1.5rem !important;
-                        border-radius: 16px !important;
-                    }
+                @media (max-width: 480px) {
+                    .glass-panel { padding: 2rem !important; margin: 1rem !important; }
                 }
             `}</style>
         </div>

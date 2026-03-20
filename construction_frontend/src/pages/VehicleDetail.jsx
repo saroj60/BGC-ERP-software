@@ -82,6 +82,7 @@ const VehicleDetail = () => {
     const [trackingLogs, setTrackingLogs] = useState([]);
     const [fuelLogs, setFuelLogs] = useState([]);
     const [maintenanceLogs, setMaintenanceLogs] = useState([]);
+    const [generalExpenses, setGeneralExpenses] = useState([]);
 
     // modals
     const [showTrackingModal, setShowTrackingModal] = useState(false);
@@ -128,6 +129,11 @@ const VehicleDetail = () => {
             const mRes = await api.get(`vehicles/maintenance/?vehicle=${id}`);
             setMaintenanceLogs(mRes.data);
         } catch (err) { console.warn('Maintenance fetch failed', err); }
+
+        try {
+            const eRes = await api.get(`expenses/?vehicle=${id}`);
+            setGeneralExpenses(eRes.data);
+        } catch (err) { console.warn('General expenses fetch failed', err); }
     };
 
     // ---------- Tracking ----------
@@ -179,11 +185,13 @@ const VehicleDetail = () => {
         { key: 'tracking', label: '📍 Tracking', count: trackingLogs.length },
         { key: 'fuel', label: '⛽ Fuel Usage', count: fuelLogs.length },
         { key: 'maintenance', label: '🔧 Maintenance', count: maintenanceLogs.length },
+        { key: 'expenses', label: '💰 General Exp.', count: generalExpenses.length },
     ];
 
     const totalFuelCost = fuelLogs.reduce((s, f) => s + parseFloat(f.cost || 0), 0);
     const totalFuelLiters = fuelLogs.reduce((s, f) => s + parseFloat(f.quantity_liters || 0), 0);
     const totalMaintenanceCost = maintenanceLogs.reduce((s, m) => s + parseFloat(m.cost || 0), 0);
+    const totalGeneralCost = generalExpenses.reduce((s, e) => s + parseFloat(e.amount || 0), 0);
 
     return (
         <div>
@@ -231,6 +239,7 @@ const VehicleDetail = () => {
                         { label: 'Fuel Cost (NPR)', value: `₨${totalFuelCost.toLocaleString()}`, icon: '💰' },
                         { label: 'Maintenance', value: maintenanceLogs.length, icon: '🔧' },
                         { label: 'Maint. Cost (NPR)', value: `₨${totalMaintenanceCost.toLocaleString()}`, icon: '🧾' },
+                        { label: 'Other Exp. (NPR)', value: `₨${totalGeneralCost.toLocaleString()}`, icon: '💸' },
                     ].map(stat => (
                         <div key={stat.label} style={{ textAlign: 'center', padding: '0.75rem', background: '#f8fafc', borderRadius: '10px' }}>
                             <div style={{ fontSize: '1.4rem' }}>{stat.icon}</div>
@@ -364,6 +373,33 @@ const VehicleDetail = () => {
                                 </Card>
                             );
                         })
+                    }
+                </div>
+            )}
+
+            {/* ---------- GENERAL EXPENSES TAB ---------- */}
+            {activeTab === 'expenses' && (
+                <div>
+                    <SectionHeader title="💰 Other Vehicle Expenses" onAdd={() => navigate('/expenses/new')} canManage={canManage} />
+                    {generalExpenses.length === 0
+                        ? <EmptyState icon="💰" text="No other expenses logged for this vehicle." />
+                        : generalExpenses.map(exp => (
+                            <Card key={exp.id}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                            <span style={{ fontWeight: 600, fontSize: '1rem' }}>{exp.description}</span>
+                                            <Badge text={exp.category} bg="#f0f9ff" color="#0369a1" />
+                                        </div>
+                                        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>👤 {exp.created_by}</div>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div style={{ fontWeight: 700, color: 'var(--danger-color)', fontSize: '1rem' }}>₨{parseFloat(exp.amount).toLocaleString()}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{exp.expense_date}</div>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))
                     }
                 </div>
             )}
