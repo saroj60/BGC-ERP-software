@@ -9,7 +9,7 @@ django.setup()
 
 from accounts.models import User
 
-email = "bhagatgrouppvt@gmail.com"
+email = "sarojbhagat666@gmail.com"
 
 try:
     user = User.objects.get(email=email)

@@ -40,6 +40,16 @@ const UserList = () => {
         }
     };
 
+    const handleActivate = async (id, email) => {
+        if (!window.confirm(`Are you sure you want to reactivate user ${email}?`)) return;
+        try {
+            await api.post(`accounts/users/${id}/activate/`);
+            setUsers(users.map(u => u.id === id ? { ...u, is_active: true } : u));
+        } catch (err) {
+            alert('Failed to reactivate user: ' + (err.response?.data?.detail || err.message));
+        }
+    };
+
     const handleResetPassword = async (id, email) => {
         const newPassword = prompt(`Enter new password for ${email}:`);
         if (!newPassword) return;
@@ -165,7 +175,14 @@ const UserList = () => {
                                             </button>
                                         </div>
                                     ) : (
-                                        <span className="text-light italic">Deactivated</span>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleActivate(user.id, user.email)}
+                                                className="btn btn-success btn-sm"
+                                            >
+                                                ♻️ Reactivate
+                                            </button>
+                                        </div>
                                     )}
                                 </td>
                             </tr>

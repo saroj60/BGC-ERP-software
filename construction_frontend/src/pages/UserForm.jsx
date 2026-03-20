@@ -52,7 +52,26 @@ const UserForm = () => {
             await api.post('accounts/users/', payload);
             navigate('/users');
         } catch (err) {
-            setError(err.response?.data?.detail || 'Failed to create user. Check if email exists.');
+            let errorMsg = 'Failed to create user.';
+            
+            // Extract field-specific errors if available
+            if (err.response?.data) {
+                const data = err.response.data;
+                if (data.detail) {
+                    errorMsg = data.detail;
+                } else if (typeof data === 'object') {
+                    // Combine multiple field errors
+                    errorMsg = Object.entries(data)
+                        .map(([field, errors]) => `${field}: ${Array.isArray(errors) ? errors.join(', ') : errors}`)
+                        .join(' | ');
+
+                    if (errorMsg.toLowerCase().includes('email')) {
+                        errorMsg += ' (Tip: Check if an inactive user already exists in the Employee list and reactivate them.)';
+                    }
+                }
+            }
+            
+            setError(errorMsg);
             setLoading(false);
         }
     };
