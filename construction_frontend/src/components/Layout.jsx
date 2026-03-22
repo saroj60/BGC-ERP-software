@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
             {/* ── Mobile top header bar (hidden on desktop via CSS) ── */}
             <header className="mobile-header">
                 <div className="mobile-header-brand">
-                    <span>🏗️</span> ConstructionOS
+                    <span>🏗️</span> Bhagat Group of Construction
                 </div>
                 <button
                     className="hamburger-btn"
@@ -61,14 +61,15 @@ const Layout = ({ children }) => {
                 className="mobile-main-content"
                 style={{
                     flex: 1,
-                    marginLeft: '280px',
-                    padding: '2rem',
-                    width: 'calc(100% - 280px)',
+                    marginLeft: sidebarOpen && window.innerWidth <= 768 ? '0' : (window.innerWidth > 768 ? '280px' : '0'),
+                    padding: window.innerWidth > 768 ? '2rem' : '1.2rem',
+                    width: window.innerWidth > 768 ? 'calc(100% - 280px)' : '100%',
                     maxWidth: '1600px',
                     boxSizing: 'border-box',
+                    transition: 'margin-left 0.3s ease',
                 }}
             >
-                <div style={{ margin: '0 auto', maxWidth: '1200px' }}>
+                <div style={{ margin: '0 auto', maxWidth: '1200px', width: '100%' }}>
                     {children}
                 </div>
             </main>

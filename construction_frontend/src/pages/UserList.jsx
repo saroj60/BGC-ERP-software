@@ -97,20 +97,19 @@ const UserList = () => {
 
     return (
         <div>
-            <div className="page-header flex justify-between items-center mb-8">
+            <div className="page-header" style={{ marginBottom: '2rem' }}>
                 <div>
                     <h1 className="text-2xl font-bold text-primary">Employee Management</h1>
-                    <p className="text-secondary">Manage access and roles for your team.</p>
+                    <p className="text-secondary" style={{ fontSize: '0.9rem' }}>Manage access and roles for your team.</p>
                 </div>
 
-                <div className="flex items-center gap-4" style={{ flexWrap: 'wrap' }}>
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-secondary">
+                <div className="flex items-center gap-3" style={{ flexWrap: 'wrap', marginTop: '1rem' }}>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-secondary" style={{ background: '#f8fafc', padding: '6px 12px', borderRadius: '8px', border: '1px solid #eef2f6' }}>
                         <input
                             type="checkbox"
                             checked={showInactive}
                             onChange={(e) => setShowInactive(e.target.checked)}
-                            className="form-control"
-                            style={{ width: '16px', height: '16px' }}
+                            style={{ width: '16px', height: '16px', accentColor: 'var(--primary-color)' }}
                         />
                         Show Inactive
                     </label>
@@ -120,75 +119,85 @@ const UserList = () => {
                 </div>
             </div>
 
-            <div className="table-container">
-                <table className="modern-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Joined</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user) => (
-                            <tr key={user.id}>
-                                <td>{user.first_name || user.last_name ? `${user.first_name} ${user.last_name}` : <em className="text-light">-</em>}</td>
-                                <td className="font-medium text-primary">{user.email}</td>
-                                <td>
-                                    <span className={`badge ${getRoleBadgeClass(user.role)}`}>
-                                        {user.role ? user.role.replace('_', ' ') : 'N/A'}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span style={{ color: user.is_active ? 'var(--success-color)' : 'var(--danger-color)', fontWeight: 'bold' }}>
-                                        {user.is_active ? 'Active' : 'Inactive'}
-                                    </span>
-                                </td>
-                                <td>{new Date(user.date_joined).toLocaleDateString()}</td>
-                                <td>
-                                    {user.is_active ? (
-                                        <div className="flex gap-2">
-                                            {isAdmin && user.id !== parseInt(localStorage.getItem('user_id') || '0') && (
-                                                <button
-                                                    onClick={() => handleLoginAs(user.id, user.email)}
-                                                    className="btn btn-secondary btn-sm"
-                                                    title={`Login as ${user.email}`}
-                                                >
-                                                    🔐 Login As
-                                                </button>
-                                            )}
-                                            <button
-                                                onClick={() => handleResetPassword(user.id, user.email)}
-                                                className="btn btn-secondary btn-sm"
-                                                title="Set a new password"
-                                            >
-                                                🔑 Reset Pwd
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(user.id, user.email)}
-                                                className="btn btn-soft-danger btn-sm"
-                                            >
-                                                🗑 Remove
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => handleActivate(user.id, user.email)}
-                                                className="btn btn-success btn-sm"
-                                            >
-                                                ♻️ Reactivate
-                                            </button>
-                                        </div>
-                                    )}
-                                </td>
+            <div className="table-container shadow-sm" style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                <div style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '8px 16px', background: 'rgba(79,70,229,0.05)',
+                    borderBottom: '1px solid #eef2f7',
+                    fontSize: '0.7rem', color: 'var(--primary-color)', fontWeight: 500,
+                }}>
+                    ⇔ Swipe to see all details
+                </div>
+                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                    <table className="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {users.map((user) => (
+                                <tr key={user.id}>
+                                    <td>{user.first_name || user.last_name ? `${user.first_name} ${user.last_name}` : <em className="text-light">-</em>}</td>
+                                    <td className="font-medium text-primary">{user.email}</td>
+                                    <td>
+                                        <span className={`badge ${getRoleBadgeClass(user.role)}`}>
+                                            {user.role ? user.role.replace('_', ' ') : 'N/A'}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style={{ color: user.is_active ? 'var(--success-color)' : 'var(--danger-color)', fontWeight: 'bold' }}>
+                                            {user.is_active ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </td>
+                                    <td>{new Date(user.date_joined).toLocaleDateString()}</td>
+                                    <td>
+                                        {user.is_active ? (
+                                            <div className="flex gap-2">
+                                                {isAdmin && user.id !== parseInt(localStorage.getItem('user_id') || '0') && (
+                                                    <button
+                                                        onClick={() => handleLoginAs(user.id, user.email)}
+                                                        className="btn btn-secondary btn-sm"
+                                                        title={`Login as ${user.email}`}
+                                                    >
+                                                        🔐 Login As
+                                                    </button>
+                                                )}
+                                                <button
+                                                    onClick={() => handleResetPassword(user.id, user.email)}
+                                                    className="btn btn-secondary btn-sm"
+                                                    title="Set a new password"
+                                                >
+                                                    🔑 Reset Pwd
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(user.id, user.email)}
+                                                    className="btn btn-soft-danger btn-sm"
+                                                >
+                                                    🗑 Remove
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => handleActivate(user.id, user.email)}
+                                                    className="btn btn-success btn-sm"
+                                                >
+                                                    ♻️ Reactivate
+                                                </button>
+                                            </div>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div className="mt-6">

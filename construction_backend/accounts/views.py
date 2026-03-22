@@ -2,16 +2,19 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from .models import User
+from django.utils import timezone
+from .models import User, UserSession
 from .serializers import (
     UserSerializer, 
     UserCreateSerializer, 
     UserUpdateSerializer,
     RoleAssignmentSerializer,
-    PasswordResetSerializer
+    PasswordResetSerializer,
+    UserSessionSerializer
 )
 from .permissions import CanManageUsers
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -185,3 +188,95 @@ class UserViewSet(viewsets.ModelViewSet):
             'access': str(refresh.access_token),
             'user': UserSerializer(user).data
         })
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Override to record session information on login.
+    """
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            try:
+                # Get JTI from the issued refresh token
+                refresh_token = response.data.get('refresh')
+                token = RefreshToken(refresh_token)
+                jti = token.get('jti')
+                user_id = response.data.get('id')
+                user = User.objects.get(id=user_id)
+                
+                # Update last_login
+                user.last_login = timezone.now()
+                user.save(update_fields=['last_login'])
+
+                # Record the session
+                ip_address = self.get_client_ip(request)
+                user_agent = request.META.get('HTTP_USER_AGENT', 'Unknown')
+                device_name = self.parse_device_name(user_agent)
+
+                UserSession.objects.create(
+                    user=user,
+                    token_jti=jti,
+                    ip_address=ip_address,
+                    user_agent=user_agent,
+                    device_name=device_name
+                )
+            except Exception as e:
+                # Log error but don't fail login
+                print(f"Error recording session: {e}")
+        
+        return response
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def parse_device_name(self, ua_string):
+        if 'Mobi' in ua_string:
+            if 'iPhone' in ua_string: return 'iPhone'
+            if 'Android' in ua_string: return 'Android Phone'
+            return 'Mobile Device'
+        if 'iPad' in ua_string: return 'iPad'
+        if 'Windows' in ua_string: return 'Windows PC'
+        if 'Mac' in ua_string: return 'Macintosh'
+        if 'Linux' in ua_string: return 'Linux PC'
+        return 'Unknown Device'
+
+class UserSessionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet for viewing and terminating active sessions.
+    """
+    serializer_class = UserSessionSerializer
+
+    def get_queryset(self):
+        # Only show active sessions that haven't been blacklisted
+        blacklist_jtis = BlacklistedToken.objects.values_list('token__jti', flat=True)
+        return UserSession.objects.filter(
+            user=self.request.user, 
+            is_active=True
+        ).exclude(token_jti__in=blacklist_jtis)
+
+    @action(detail=True, methods=['post'])
+    def logout(self, request, pk=None):
+        """
+        Terminate a specific session by blacklisting its refresh token.
+        """
+        session = self.get_object()
+        
+        try:
+            # Find the outstanding token in SimpleJWT
+            outstanding_token = OutstandingToken.objects.filter(jti=session.token_jti).first()
+            if outstanding_token:
+                # Blacklist the token
+                BlacklistedToken.objects.get_or_create(token=outstanding_token)
+            
+            # Deactivate the session record
+            session.is_active = False
+            session.save()
+            
+            return Response({"detail": "Session terminated successfully."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)

@@ -63,7 +63,7 @@ const Login = () => {
                         boxShadow: '0 12px 24px rgba(79, 70, 229, 0.3)',
                     }}>🏗️</div>
                     <h1 style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                        ConstructionOS
+                        Bhagat Group of Construction
                     </h1>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
                         Professional Construction Management

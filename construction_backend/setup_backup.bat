@@ -1,6 +1,6 @@
 @echo off
 echo ===================================================
-echo   ConstructionOS - Automated Backup Setup Utility
+echo   Bhagat Group of Construction - Automated Backup Setup Utility
 echo ===================================================
 echo.
 echo This script will configure Windows Task Scheduler to

@@ -558,23 +558,45 @@ a {
 
   /* Larger touch targets for buttons */
   .btn {
-    min-height: 44px;
+    min-height: 48px;
+    padding: 0.6rem 1.2rem;
     touch-action: manipulation;
   }
-  .btn-sm { min-height: 36px; }
+  .btn-sm { min-height: 38px; padding: 0.4rem 0.8rem; }
 
   /* Single-column grids on mobile */
   .dashboard-grid {
     grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Responsive Grid Utilities */
+  .grid-2-col, .grid-3-col, .grid-4-col {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
   }
 
   /* Tables scroll horizontally */
   .table-container {
-    overflow-x: auto;
+    overflow-x: auto !important;
+    margin: 0 -1.2rem; /* Bleed to edges on mobile */
+    padding: 0 1.2rem;
+    width: calc(100% + 2.4rem);
+    border-radius: 0;
     -webkit-overflow-scrolling: touch;
   }
   .modern-table {
     min-width: 600px;
+  }
+
+  /* Form Layouts */
+  .form-grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .glass-card form {
+    padding: 1.5rem !important;
   }
 
   /* Login card tighter padding */

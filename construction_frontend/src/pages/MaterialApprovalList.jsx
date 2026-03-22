@@ -138,7 +138,7 @@ const MaterialApprovalList = () => {
             {loading ? (
                 <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>Loading requests…</div>
             ) : (
-                <div style={{ background: 'white', borderRadius: '14px', boxShadow: 'var(--shadow-md)', border: '1px solid rgba(226,232,240,0.6)', overflow: 'hidden' }}>
+                <div className="table-container shadow-md" style={{ background: 'white', borderRadius: '14px', border: '1px solid rgba(226,232,240,0.6)', overflow: 'hidden' }}>
                     {/* Swipe hint */}
                     <div style={{
                         display: 'flex', alignItems: 'center', gap: '6px',
@@ -151,7 +151,7 @@ const MaterialApprovalList = () => {
 
                     {/* Scrollable table */}
                     <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
-                        <table style={{ width: '100%', minWidth: '640px', borderCollapse: 'collapse' }}>
+                        <table style={{ width: '100%', minWidth: '700px', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ background: '#f8fafc' }}>
                                     {['Project', 'Material', 'Quantity', 'Requested By', 'Status', 'Actions'].map(h => (
@@ -185,7 +185,7 @@ const MaterialApprovalList = () => {
                                         <td style={{ padding: '13px 16px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
                                             {req.project_name || req.project}
                                         </td>
-                                        <td style={{ padding: '13px 16px', color: 'var(--text-primary)' }}>
+                                        <td style={{ padding: '13px 16px', color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
                                             {req.material_name}
                                         </td>
                                         <td style={{ padding: '13px 16px', whiteSpace: 'nowrap', color: 'var(--text-secondary)' }}>
@@ -203,14 +203,16 @@ const MaterialApprovalList = () => {
                                                     <button
                                                         className="btn btn-soft-success btn-sm"
                                                         onClick={() => handleUpdateStatus(req.id, 'APPROVED')}
+                                                        style={{ padding: '4px 10px', fontSize: '0.75rem' }}
                                                     >
-                                                        ✓ Approve
+                                                        ✓ App
                                                     </button>
                                                     <button
                                                         className="btn btn-soft-danger btn-sm"
                                                         onClick={() => handleUpdateStatus(req.id, 'REJECTED')}
+                                                        style={{ padding: '4px 10px', fontSize: '0.75rem' }}
                                                     >
-                                                        ✕ Reject
+                                                        ✕ Rej
                                                     </button>
                                                 </div>
                                             ) : (

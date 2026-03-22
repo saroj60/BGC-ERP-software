@@ -47,13 +47,13 @@ const ProjectList = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-8">
+            <div className="page-header">
                 <div>
                     <h1 className="text-2xl font-bold text-primary">Projects</h1>
                     <p className="text-secondary">Manage and track your construction sites.</p>
                 </div>
                 {localStorage.getItem('user_role') === 'ADMIN' && (
-                    <Link to="/projects/new" className="btn btn-primary">
+                    <Link to="/projects/new" className="btn btn-primary btn-sm">
                         + New Project
                     </Link>
                 )}

@@ -48,16 +48,16 @@ const VehicleList = () => {
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <div>
-                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.25rem', color: 'var(--text-primary)' }}>
                         🚜 Vehicle Fleet
                     </h2>
-                    <p style={{ color: 'var(--text-secondary)' }}>Manage construction vehicles and equipment.</p>
+                    <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.9rem' }}>Manage construction vehicles and equipment.</p>
                 </div>
                 {canManage && (
                     <button
-                        className="btn-primary"
+                        className="btn btn-primary btn-sm"
                         onClick={() => navigate('/vehicles/new')}
                         style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                     >

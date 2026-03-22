@@ -47,70 +47,88 @@ const AttendanceList = () => {
     if (loading && !attendance.length) return <div style={{ padding: '20px' }}>Loading attendance...</div>;
 
     return (
-        <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ color: '#2c3e50' }}>📋 Attendance Log</h2>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <select
-                        value={selectedProject}
-                        onChange={(e) => setSelectedProject(e.target.value)}
-                        style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                    >
-                        <option value="">All Projects</option>
-                        {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                    </select>
-                    <Link to="/workers" className="btn-secondary" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        👷 Manage Workers
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '3rem' }}>
+            <div className="page-header">
+                <div>
+                    <h2 style={{ fontSize: '1.8rem', color: '#2c3e50', marginBottom: '0.25rem' }}>📋 Attendance Log</h2>
+                    <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.9rem' }}>Track daily presence of your site labor.</p>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <Link to="/workers" className="btn btn-secondary btn-sm">
+                        👷 Workers
                     </Link>
-                    <Link to="/attendance/new" className="btn-primary" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span>+</span> Mark Attendance
+                    <Link to="/attendance/new" className="btn btn-primary btn-sm">
+                        + Mark
                     </Link>
                 </div>
             </div>
 
-            {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
+            <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontWeight: '600', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Filter Project:</label>
+                <select
+                    className="form-control"
+                    value={selectedProject}
+                    onChange={(e) => setSelectedProject(e.target.value)}
+                    style={{ maxWidth: '100%' }}
+                >
+                    <option value="">All Projects</option>
+                    {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+            </div>
 
-            <div className="glass-card" style={{ overflow: 'hidden', padding: 0 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead style={{ background: '#f8f9fa' }}>
-                        <tr>
-                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #eef2f7' }}>Date</th>
-                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #eef2f7' }}>Project</th>
-                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #eef2f7' }}>Worker Name</th>
-                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #eef2f7' }}>Role</th>
-                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #eef2f7' }}>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {attendance.length === 0 ? (
-                            <tr><td colSpan="5" style={{ padding: '30px', textAlign: 'center', color: '#888' }}>No records found.</td></tr>
-                        ) : (
-                            attendance.map((record, index) => (
-                                <tr key={record.id} style={{ background: index % 2 === 0 ? 'white' : '#fcfcfc', borderBottom: '1px solid #f0f0f0' }}>
-                                    <td style={{ padding: '15px' }}>{record.date}</td>
-                                    <td style={{ padding: '15px', fontWeight: 500 }}>{record.project_name || record.project}</td>
-                                    <td style={{ padding: '15px' }}>{record.worker_name}</td>
-                                    <td style={{ padding: '15px' }}>
-                                        <span style={{
-                                            background: '#e0f2fe', color: '#0369a1',
-                                            padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem'
-                                        }}>
-                                            {record.role}
-                                        </span>
-                                    </td>
-                                    <td style={{ padding: '15px' }}>
-                                        <span style={{
-                                            color: record.present ? '#16a34a' : '#dc2626',
-                                            fontWeight: 600
-                                        }}>
-                                            {record.present ? 'Present' : 'Absent'}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+            {error && <div style={{ color: 'var(--danger-color)', marginBottom: '1rem', fontSize: '0.9rem' }}>⚠️ {error}</div>}
+
+            <div className="table-container shadow-sm" style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                <div style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '8px 16px', background: 'rgba(79,70,229,0.05)',
+                    borderBottom: '1px solid #eef2f7',
+                    fontSize: '0.7rem', color: 'var(--primary-color)', fontWeight: 500,
+                }}>
+                    ⇔ Swipe to see all columns
+                </div>
+                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                    <table style={{ width: '100%', minWidth: '700px', borderCollapse: 'collapse' }}>
+                        <thead style={{ background: '#f8fafc' }}>
+                            <tr>
+                                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '2px solid #eef2f7', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Date</th>
+                                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '2px solid #eef2f7', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Project</th>
+                                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '2px solid #eef2f7', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Worker Name</th>
+                                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '2px solid #eef2f7', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Role</th>
+                                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '2px solid #eef2f7', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {attendance.length === 0 ? (
+                                <tr><td colSpan="5" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No attendance records found.</td></tr>
+                            ) : (
+                                attendance.map((record, index) => (
+                                    <tr key={record.id} style={{ background: index % 2 === 0 ? 'white' : '#fafbfc', borderBottom: '1px solid #f0f0f0' }}>
+                                        <td style={{ padding: '12px 16px', fontSize: '0.85rem' }}>{record.date}</td>
+                                        <td style={{ padding: '12px 16px', fontWeight: 600, fontSize: '0.85rem' }}>{record.project_name || record.project}</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '0.85rem' }}>{record.worker_name}</td>
+                                        <td style={{ padding: '12px 16px' }}>
+                                            <span style={{
+                                                background: '#e0f2fe', color: '#0369a1',
+                                                padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600
+                                            }}>
+                                                {record.role}
+                                            </span>
+                                        </td>
+                                        <td style={{ padding: '12px 16px' }}>
+                                            <span style={{
+                                                color: record.present ? '#16a34a' : '#dc2626',
+                                                fontWeight: 700, fontSize: '0.85rem'
+                                            }}>
+                                                {record.present ? 'Present' : 'Absent'}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

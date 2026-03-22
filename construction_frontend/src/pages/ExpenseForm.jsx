@@ -74,28 +74,28 @@ const ExpenseForm = () => {
     ];
 
     return (
-        <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '0 auto', paddingBottom: '4rem' }}>
-            <header style={{ marginBottom: '2.5rem' }}>
-                <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                    Log New Expense
-                </h1>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                    Record expenditures and associate them with projects or equipment.
-                </p>
+        <div className="animate-fade-in" style={{ maxWidth: '750px', margin: '0 auto', paddingBottom: '3rem' }}>
+            <header className="page-header">
+                <div>
+                    <h1>Log New Expense</h1>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                        Record expenditures and associate them with projects or assets.
+                    </p>
+                </div>
             </header>
 
             {error && (
                 <div style={{
-                    padding: '1rem 1.5rem', marginBottom: '2rem', borderRadius: '12px',
+                    padding: '0.8rem 1.25rem', marginBottom: '1.5rem', borderRadius: '12px',
                     background: '#fef2f2', color: '#dc2626', border: '1px solid #fee2e2',
-                    fontSize: '0.9rem', fontWeight: '500'
+                    fontSize: '0.85rem', fontWeight: '500'
                 }}>
                     ⚠️ {error}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '3rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <form onSubmit={handleSubmit} className="glass-card" style={{ padding: window.innerWidth > 768 ? '2.5rem' : '1.25rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div className="form-group">
                         <label className="form-label">Associated Project</label>
                         <select name="project" value={formData.project} onChange={handleChange} required className="form-control">
@@ -112,7 +112,7 @@ const ExpenseForm = () => {
                         </select>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr', gap: '1.5rem' }}>
                         <div className="form-group">
                             <label className="form-label">Expense Category</label>
                             <select name="category" value={formData.category} onChange={handleChange} required className="form-control">
@@ -132,7 +132,7 @@ const ExpenseForm = () => {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Brief Description</label>
+                        <label className="form-label">Description</label>
                         <textarea
                             name="description"
                             placeholder="Provide details about this expenditure..."
@@ -146,11 +146,20 @@ const ExpenseForm = () => {
                     </div>
                 </div>
 
-                <div style={{ marginTop: '3rem', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                    <button type="button" onClick={() => navigate('/expenses')} className="btn btn-secondary">
-                        Back to List
+                <div style={{ 
+                    marginTop: '2.5rem', 
+                    display: 'flex', 
+                    gap: '0.75rem', 
+                    justifyContent: 'flex-end',
+                    flexWrap: 'wrap'
+                }}>
+                    <button type="button" onClick={() => navigate('/expenses')} className="btn btn-secondary btn-block-mobile" style={{ flex: window.innerWidth <= 768 ? '1' : 'none' }}>
+                        Back
                     </button>
-                    <button type="submit" className="btn btn-primary" disabled={loading} style={{ minWidth: '180px' }}>
+                    <button type="submit" className="btn btn-primary btn-block-mobile" disabled={loading} style={{ 
+                        minWidth: window.innerWidth > 768 ? '180px' : '100%',
+                        flex: window.innerWidth <= 768 ? '1' : 'none'
+                    }}>
                         {loading ? 'Processing...' : 'Save Expense'}
                     </button>
                 </div>

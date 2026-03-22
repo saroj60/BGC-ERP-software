@@ -45,3 +45,19 @@ class User(AbstractUser):
         SITE_ENGINEER and PROJECT_MANAGER are blocked even if is_staff=True.
         """
         return self.is_admin() and self.is_staff
+
+class UserSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sessions')
+    token_jti = models.UUIDField(unique=True, db_index=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
+    device_name = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_active = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-last_active']
+
+    def __str__(self):
+        return f"{self.user.email} - {self.device_name or 'Unknown Device'} ({self.last_active})"

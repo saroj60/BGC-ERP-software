@@ -33,6 +33,7 @@ import VehicleForm from './pages/VehicleForm';
 import VehicleDetail from './pages/VehicleDetail';
 import Analytics from './pages/Analytics';
 import Inventory from './pages/Inventory';
+import SecuritySettings from './pages/SecuritySettings';
 
 import Layout from './components/Layout';
 
@@ -270,6 +271,14 @@ function App() {
           element={
             <PrivateRoute>
               <VehicleDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/security"
+          element={
+            <PrivateRoute>
+              <SecuritySettings />
             </PrivateRoute>
           }
         />

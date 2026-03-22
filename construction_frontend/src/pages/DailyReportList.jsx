@@ -32,19 +32,19 @@ const DailyReportList = () => {
 
     return (
         <div>
-            <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <div>
-                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>📝 Daily Site Reports</h2>
-                    <p style={{ color: 'var(--text-secondary)', margin: 0 }}>View and manage day-to-day site activity logs.</p>
+                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.25rem', color: 'var(--text-primary)' }}>📝 Site Reports</h2>
+                    <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.9rem' }}>View and manage day-to-day activity logs.</p>
                 </div>
-                <Link to="/reports/new" className="btn btn-primary">
-                    + Create Report
+                <Link to="/reports/new" className="btn btn-primary btn-sm">
+                    + New Report
                 </Link>
             </div>
 
-            {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
+            {error && <div style={{ color: 'var(--danger-color)', marginBottom: '1rem', fontSize: '0.9rem' }}>⚠️ {error}</div>}
 
-            <div style={{ background: 'white', borderRadius: '12px', boxShadow: 'var(--shadow-md)', border: '1px solid rgba(226,232,240,0.6)' }}>
+            <div className="table-container shadow-sm" style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
                 {/* Mobile scroll hint */}
                 <div style={{
                     display: 'flex', alignItems: 'center', gap: '6px',
@@ -61,27 +61,27 @@ const DailyReportList = () => {
                 {/* Scrollable table wrapper */}
                 <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
                     <table style={{ width: '100%', minWidth: '700px', borderCollapse: 'collapse' }}>
-                        <thead style={{ background: '#f8f9fa' }}>
+                        <thead style={{ background: '#f8fafc' }}>
                             <tr>
-                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', whiteSpace: 'nowrap' }}>Date</th>
-                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', minWidth: '130px' }}>Project</th>
-                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', whiteSpace: 'nowrap' }}>Weather</th>
-                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', minWidth: '160px' }}>Work Done</th>
-                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', minWidth: '140px' }}>Issues</th>
-                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', whiteSpace: 'nowrap' }}>Photos</th>
+                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', whiteSpace: 'nowrap', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Date</th>
+                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', minWidth: '130px', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Project</th>
+                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', whiteSpace: 'nowrap', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Weather</th>
+                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', minWidth: '160px', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Work Done</th>
+                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', minWidth: '140px', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Issues</th>
+                                <th style={{ padding: '12px 15px', textAlign: 'left', borderBottom: '2px solid #eef2f7', whiteSpace: 'nowrap', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Photos</th>
                             </tr>
                         </thead>
                         <tbody>
                             {reports.length === 0 ? (
-                                <tr><td colSpan="6" style={{ padding: '30px', textAlign: 'center', color: '#888' }}>No reports found.</td></tr>
+                                <tr><td colSpan="6" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No reports found.</td></tr>
                             ) : (
                                 reports.map((report, index) => (
-                                    <tr key={report.id} style={{ background: index % 2 === 0 ? 'white' : '#fcfcfc', borderBottom: '1px solid #f0f0f0' }}>
-                                        <td style={{ padding: '12px 15px', whiteSpace: 'nowrap' }}>{report.date}</td>
-                                        <td style={{ padding: '12px 15px', fontWeight: 500 }}>{report.project_name || report.project}</td>
-                                        <td style={{ padding: '12px 15px', whiteSpace: 'nowrap' }}>{report.weather}</td>
-                                        <td style={{ padding: '12px 15px' }}>{report.work_done?.substring(0, 60)}{report.work_done?.length > 60 ? '...' : ''}</td>
-                                        <td style={{ padding: '12px 15px', color: report.issues ? '#e74c3c' : '#2ecc71' }}>
+                                    <tr key={report.id} style={{ background: index % 2 === 0 ? 'white' : '#fafbfc', borderBottom: '1px solid #f0f0f0' }}>
+                                        <td style={{ padding: '12px 15px', whiteSpace: 'nowrap', fontSize: '0.85rem' }}>{report.date}</td>
+                                        <td style={{ padding: '12px 15px', fontWeight: 600, fontSize: '0.85rem' }}>{report.project_name || report.project}</td>
+                                        <td style={{ padding: '12px 15px', whiteSpace: 'nowrap', fontSize: '0.85rem' }}>{report.weather}</td>
+                                        <td style={{ padding: '12px 15px', fontSize: '0.85rem' }}>{report.work_done?.substring(0, 60)}{report.work_done?.length > 60 ? '...' : ''}</td>
+                                        <td style={{ padding: '12px 15px', color: report.issues ? '#e74c3c' : '#2ecc71', fontSize: '0.85rem' }}>
                                             {report.issues ? report.issues.substring(0, 50) + (report.issues.length > 50 ? '...' : '') : 'None'}
                                         </td>
                                         <td style={{ padding: '12px 15px', whiteSpace: 'nowrap' }}>
@@ -89,11 +89,12 @@ const DailyReportList = () => {
                                                 <button
                                                     onClick={() => setSelectedReport(report)}
                                                     className="btn btn-soft-info btn-sm"
+                                                    style={{ padding: '4px 8px', fontSize: '0.75rem' }}
                                                 >
-                                                    📷 {report.photos.length} Photos
+                                                    📷 {report.photos.length}
                                                 </button>
                                             ) : (
-                                                <span style={{ color: '#9ca3af', fontSize: '0.85rem' }}>No Photos</span>
+                                                <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>None</span>
                                             )}
                                         </td>
                                     </tr>

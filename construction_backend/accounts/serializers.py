@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.password_validation import validate_password
-from .models import User
+from .models import User, UserSession
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -183,3 +183,12 @@ class PasswordResetSerializer(serializers.Serializer):
         instance.set_password(validated_data['password'])
         instance.save()
         return instance
+
+class UserSessionSerializer(serializers.ModelSerializer):
+    """
+    Serializer for listing active user sessions.
+    """
+    class Meta:
+        model = UserSession
+        fields = ['id', 'ip_address', 'user_agent', 'device_name', 'created_at', 'last_active', 'is_active']
+        read_only_fields = ['id', 'created_at', 'last_active']

@@ -24,6 +24,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     const mainItems = [
         { name: 'Dashboard', path: '/dashboard', icon: '📊' },
         { name: 'Projects', path: '/projects', icon: '🏗️' },
+        { name: 'Security', path: '/security', icon: '🛡️' },
     ];
 
     const operationsItems = [];
@@ -113,7 +114,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                             fontFamily: "'Outfit', sans-serif",
                             letterSpacing: '-0.02em',
                         }}>
-                            🏗️ <span style={{ color: 'var(--text-primary)' }}>Construction</span>OS
+                             Bhagat Grp of Construction
                         </div>
                         <div style={{
                             marginTop: '4px',

@@ -61,46 +61,55 @@ const ExpenseList = () => {
 
     return (
         <div>
-            <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <div>
-                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>💰 Project Expenses</h2>
-                    <p style={{ color: 'var(--text-secondary)', margin: 0 }}>Track and manage project expenditures.</p>
+                    <h2 style={{ fontSize: '1.8rem', marginBottom: '0.25rem', color: 'var(--text-primary)' }}>💰 Project Expenses</h2>
+                    <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.9rem' }}>Track and manage project expenditures.</p>
                 </div>
-                <Link to="/expenses/new" className="btn btn-primary">
+                <Link to="/expenses/new" className="btn btn-primary btn-sm">
                     + New Expense
                 </Link>
             </div>
 
-            <div style={{ marginBottom: '20px' }}>
-                <label style={{ marginRight: '10px', fontWeight: 'bold' }}>Select Project:</label>
+            <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label style={{ fontWeight: '600', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Filter by Project:</label>
                 <select
+                    className="form-control"
                     value={selectedProject}
                     onChange={(e) => setSelectedProject(e.target.value)}
-                    style={{ padding: '10px', borderRadius: '5px', minWidth: '200px' }}
+                    style={{ maxWidth: '100%' }}
                 >
                     {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
             </div>
 
             {selectedProject && (
-                <div className="glass-card" style={{ padding: '1rem 1.5rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Total Expenses</span>
-                    <span style={{ color: 'var(--danger-color)', fontWeight: 700, fontSize: '1.3rem' }}>₨ {parseFloat(totalAmount).toLocaleString()}</span>
+                <div className="glass-card" style={{ padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Total Period Expense</span>
+                    <span style={{ color: 'var(--danger-color)', fontWeight: 700, fontSize: '1.2rem' }}>₨ {parseFloat(totalAmount).toLocaleString()}</span>
                 </div>
             )}
 
-            {loading ? <p style={{ textAlign: 'center', padding: '2rem' }}>Loading...</p> : (
-                <div className="scrollable-table-wrap">
-                    <div className="table-container">
-                        <table className="modern-table">
+            {loading ? <p style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>Loading expenses...</p> : (
+                <div className="table-container shadow-sm" style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                    <div style={{
+                        display: 'flex', alignItems: 'center', gap: '6px',
+                        padding: '8px 16px', background: 'rgba(79,70,229,0.05)',
+                        borderBottom: '1px solid #eef2f7',
+                        fontSize: '0.7rem', color: 'var(--primary-color)', fontWeight: 500,
+                    }}>
+                        ⇔ Swipe to see all details
+                    </div>
+                    <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                        <table className="modern-table" style={{ width: '100%', minWidth: '800px' }}>
                             <thead>
                                 <tr>
                                     <th style={{ whiteSpace: 'nowrap' }}>Date</th>
                                     <th>Category</th>
-                                    <th>Vehicle</th>
-                                    <th style={{ minWidth: '140px' }}>Description</th>
+                                    <th>Asset/Vehicle</th>
+                                    <th style={{ minWidth: '160px' }}>Description</th>
                                     <th style={{ whiteSpace: 'nowrap' }}>Amount (₨)</th>
-                                    <th style={{ whiteSpace: 'nowrap' }}>Added By</th>
+                                    <th style={{ whiteSpace: 'nowrap' }}>Log By</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -109,21 +118,22 @@ const ExpenseList = () => {
                                     <tr key={exp.id}>
                                         <td style={{ whiteSpace: 'nowrap' }}>{exp.expense_date}</td>
                                         <td><span className="badge badge-info">{exp.category}</span></td>
-                                        <td>{exp.vehicle_details ? `${exp.vehicle_details.name} (${exp.vehicle_details.number})` : '—'}</td>
-                                        <td>{exp.description}</td>
+                                        <td style={{ fontSize: '0.85rem' }}>{exp.vehicle_details ? `${exp.vehicle_details.name} (${exp.vehicle_details.number})` : '—'}</td>
+                                        <td style={{ fontSize: '0.85rem' }}>{exp.description}</td>
                                         <td style={{ fontWeight: 700, color: 'var(--danger-color)', whiteSpace: 'nowrap' }}>₨{parseFloat(exp.amount).toLocaleString()}</td>
-                                        <td style={{ whiteSpace: 'nowrap' }}>{exp.created_by}</td>
+                                        <td style={{ whiteSpace: 'nowrap', fontSize: '0.8rem' }}>{exp.created_by}</td>
                                         <td>
                                             <button
                                                 onClick={() => handleDelete(exp.id)}
                                                 className="btn btn-soft-danger btn-sm"
+                                                style={{ padding: '4px 8px', fontSize: '0.75rem' }}
                                             >
-                                                🗑 Delete
+                                                🗑 Del
                                             </button>
                                         </td>
                                     </tr>
                                 ))}
-                                {expenses.length === 0 && <tr><td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>No expenses found.</td></tr>}
+                                {expenses.length === 0 && <tr><td colSpan="7" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>No expenses recorded for this project.</td></tr>}
                             </tbody>
                         </table>
                     </div>
