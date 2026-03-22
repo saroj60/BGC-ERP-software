@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, UserSession
 
 
 class RoleBasedAdminSite(admin.AdminSite):
@@ -54,3 +54,14 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('email',)
     ordering = ('email',)
+
+
+@admin.register(UserSession)
+class UserSessionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'device_name', 'ip_address', 'last_active', 'is_active', 'created_at')
+    list_filter = ('is_active', 'created_at', 'last_active')
+    search_fields = ('user__email', 'ip_address', 'user_agent', 'device_name')
+    readonly_fields = ('created_at', 'last_active')
+    
+    def has_add_permission(self, request):
+        return False # Sessions should only be created via login
