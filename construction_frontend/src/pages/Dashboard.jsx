@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import api from '../api/axios';
@@ -76,8 +77,10 @@ const Dashboard = () => {
                     </p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                    <button className="btn btn-secondary btn-sm">Report</button>
-                    <button className="btn btn-primary btn-sm">+ New Project</button>
+                    <Link to="/reports/new" className="btn btn-secondary btn-sm">Report</Link>
+                    {role === 'ADMIN' && (
+                        <Link to="/projects/new" className="btn btn-primary btn-sm">+ New Project</Link>
+                    )}
                 </div>
             </header>
 
