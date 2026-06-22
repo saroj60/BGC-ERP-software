@@ -9,6 +9,13 @@ class InventoryItemViewSet(viewsets.ModelViewSet):
     serializer_class = InventoryItemSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        return InventoryItem.objects.filter(company=user.company) if user.company else InventoryItem.objects.none()
+
+    def perform_create(self, serializer):
+        serializer.save(company=self.request.user.company)
+
 class MaterialRequestViewSet(viewsets.ModelViewSet):
     """
     API endpoint for managing Material Requests.
@@ -20,7 +27,7 @@ class MaterialRequestViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = MaterialRequest.objects.all()
+        queryset = MaterialRequest.objects.filter(company=user.company) if user.company else MaterialRequest.objects.none()
 
         if user.is_admin():
             pass
@@ -43,6 +50,6 @@ class MaterialRequestViewSet(viewsets.ModelViewSet):
         user = self.request.user
         # Auto-approve if created by Admin or Project Manager
         if user.is_admin() or user.is_project_manager():
-            serializer.save(requested_by=user, status='APPROVED')
+            serializer.save(requested_by=user, status='APPROVED', company=user.company)
         else:
-            serializer.save(requested_by=user)
+            serializer.save(requested_by=user, company=user.company)

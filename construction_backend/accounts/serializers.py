@@ -11,6 +11,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['role'] = self.user.role
         data['id'] = self.user.id
         data['email'] = self.user.email
+        if self.user.company:
+            data['company_name'] = self.user.company.name
+            data['company_logo'] = self.user.company.logo if self.user.company.logo else None
+            data['theme_color'] = self.user.company.theme_color
         return data
 
 

@@ -34,6 +34,7 @@ import VehicleDetail from './pages/VehicleDetail';
 import Analytics from './pages/Analytics';
 import Inventory from './pages/Inventory';
 import SecuritySettings from './pages/SecuritySettings';
+import SaaSAdmin from './pages/SaaSAdmin';
 
 import Layout from './components/Layout';
 
@@ -44,6 +45,13 @@ const PrivateRoute = ({ children }) => {
 };
 
 function App() {
+  React.useEffect(() => {
+    const themeColor = localStorage.getItem('theme_color');
+    if (themeColor) {
+      document.documentElement.style.setProperty('--primary-color', themeColor);
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -279,6 +287,14 @@ function App() {
           element={
             <PrivateRoute>
               <SecuritySettings />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/saas-admin"
+          element={
+            <PrivateRoute>
+              <SaaSAdmin />
             </PrivateRoute>
           }
         />

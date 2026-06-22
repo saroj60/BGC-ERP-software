@@ -176,3 +176,8 @@ node_modules/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+venv_win/
+*.zip
+*_deploy.zip
+*_script.py

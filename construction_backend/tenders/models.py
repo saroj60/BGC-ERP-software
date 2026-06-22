@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 
 class Tender(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         OPEN = 'OPEN', 'Open'
         IN_REVIEW = 'IN_REVIEW', 'In Review'
@@ -37,6 +38,7 @@ class Tender(models.Model):
 
 
 class Bid(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         SUBMITTED = 'SUBMITTED', 'Submitted'
         ACCEPTED = 'ACCEPTED', 'Accepted'

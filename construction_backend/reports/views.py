@@ -16,7 +16,7 @@ class DailySiteReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = DailySiteReport.objects.all()
+        queryset = DailySiteReport.objects.filter(company=user.company) if user.company else DailySiteReport.objects.none()
 
         if user.is_admin():
             pass # Admin sees all
@@ -54,6 +54,10 @@ class DailySiteReportViewSet(viewsets.ModelViewSet):
         return response
 
 class ReportPhotoViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        user = self.request.user
+        return ReportPhoto.objects.filter(company=user.company) if user.company else ReportPhoto.objects.none()
+
     """
     API endpoint for managing Report Photos.
     
@@ -73,7 +77,7 @@ class ReportPhotoViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         # Optional: Add extra validation here if needed
-        serializer.save()
+        serializer.save(company=self.request.user.company)
 
 class WorkerViewSet(viewsets.ModelViewSet):
     """
@@ -87,7 +91,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Worker.objects.all()
+        queryset = Worker.objects.filter(company=user.company) if user.company else Worker.objects.none()
 
         if user.is_admin():
             pass
@@ -112,7 +116,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Attendance.objects.all()
+        queryset = Attendance.objects.filter(company=user.company) if user.company else Attendance.objects.none()
 
         if user.is_admin():
             pass

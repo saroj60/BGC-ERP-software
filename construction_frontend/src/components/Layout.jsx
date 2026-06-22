@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
+import ChatbotWidget from './ChatbotWidget';
 
 const Layout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -73,6 +74,8 @@ const Layout = ({ children }) => {
                     {children}
                 </div>
             </main>
+
+            <ChatbotWidget />
 
             {/* ── Responsive style override to reset margin on mobile ── */}
             <style>{`

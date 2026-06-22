@@ -20,13 +20,17 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        qs = Project.objects.filter(company=user.company) if user.company else Project.objects.none()
         if user.is_admin():
-            return Project.objects.all()
+            return qs
         elif user.is_project_manager():
-            return Project.objects.filter(project_manager=user)
+            return qs.filter(project_manager=user)
         elif user.is_site_engineer():
-            return Project.objects.filter(site_engineers=user)
+            return qs.filter(site_engineers=user)
         return Project.objects.none()
+
+    def perform_create(self, serializer):
+        serializer.save(company=self.request.user.company)
 
     @action(detail=True, methods=['get'])
     def progress(self, request, pk=None):
@@ -82,18 +86,17 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        qs = Task.objects.filter(company=user.company) if user.company else Task.objects.none()
         if user.is_admin():
-            return Task.objects.all()
+            return qs
         elif user.is_project_manager():
-            # PMs can see tasks for projects they manage
-            return Task.objects.filter(project__project_manager=user)
+            return qs.filter(project__project_manager=user)
         elif user.is_site_engineer():
-            # Engineers can only see tasks assigned to them
-            return Task.objects.filter(assigned_to=user)
+            return qs.filter(assigned_to=user)
         return Task.objects.none()
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by=self.request.user, company=self.request.user.company)
 
 class ProjectDocumentViewSet(viewsets.ModelViewSet):
     """
@@ -105,12 +108,13 @@ class ProjectDocumentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        qs = ProjectDocument.objects.filter(project__company=user.company) if user.company else ProjectDocument.objects.none()
         if user.is_admin():
-            return ProjectDocument.objects.all()
+            return qs
         elif user.is_project_manager():
-            return ProjectDocument.objects.filter(project__project_manager=user)
+            return qs.filter(project__project_manager=user)
         elif user.is_site_engineer():
-            return ProjectDocument.objects.filter(project__site_engineers=user)
+            return qs.filter(project__site_engineers=user)
         return ProjectDocument.objects.none()
 
     def perform_create(self, serializer):

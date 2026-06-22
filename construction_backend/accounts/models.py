@@ -2,6 +2,17 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from .managers import CustomUserManager
 
+class Company(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    subdomain = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    logo = models.URLField(max_length=500, null=True, blank=True)
+    theme_color = models.CharField(max_length=7, default='#4f46e5')
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 class User(AbstractUser):
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "Admin"
@@ -11,6 +22,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField('email address', unique=True)
     role = models.CharField(max_length=50, choices=Role.choices, default=Role.SITE_ENGINEER)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -36,6 +36,8 @@ urlpatterns = [
     path('api/tenders/', include('tenders.urls')),
     path('api/hr/', include('hr.urls')),
     path('api/vehicles/', include('vehicles.urls')),
+    path('api/saas/', include('saas_admin.urls')),
+    path('api/chat/', include('chatbot.urls')),
 ]
 
 if settings.DEBUG:

@@ -3,6 +3,7 @@ from projects.models import Project
 from django.conf import settings
 
 class Vehicle(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         AVAILABLE = 'AVAILABLE', 'Available'
         IN_USE = 'IN_USE', 'In Use'
@@ -24,6 +25,7 @@ class Vehicle(models.Model):
         return f"{self.name} ({self.number})"
 
 class VehicleTracking(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='tracking_logs')
     location = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -34,6 +36,7 @@ class VehicleTracking(models.Model):
         return f"{self.vehicle.number} - {self.location} at {self.timestamp.strftime('%Y-%m-%d %H:%M')}"
 
 class FuelUsage(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='fuel_logs')
     date = models.DateField()
     quantity_liters = models.DecimalField(max_digits=10, decimal_places=2)
@@ -47,6 +50,7 @@ class FuelUsage(models.Model):
         return f"{self.vehicle.number} - {self.quantity_liters}L on {self.date}"
 
 class MaintenanceRecord(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         SCHEDULED = 'SCHEDULED', 'Scheduled'
         IN_PROGRESS = 'IN_PROGRESS', 'In Progress'

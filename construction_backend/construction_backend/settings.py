@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'tenders',
     'hr',
     'rest_framework_simplejwt.token_blacklist',
+    'saas_admin',
+    'chatbot',
 ]
 
 MIDDLEWARE = [
@@ -157,6 +159,11 @@ REST_FRAMEWORK = {
 }
 
 from datetime import timedelta
+import os
+
+# Gemini API configuration
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),

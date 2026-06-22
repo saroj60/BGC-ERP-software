@@ -9,6 +9,7 @@ class Project(models.Model):
         ON_HOLD = 'ON_HOLD', 'On Hold'
 
     name = models.CharField(max_length=200)
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True, related_name='projects')
     client_name = models.CharField(max_length=200)
     location = models.CharField(max_length=255)
     start_date = models.DateField()

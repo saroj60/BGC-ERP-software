@@ -3,6 +3,7 @@ from projects.models import Project
 from accounts.models import User
 
 class InventoryItem(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200, unique=True)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     unit = models.CharField(max_length=50) # e.g., kg, liters, bags
@@ -12,6 +13,7 @@ class InventoryItem(models.Model):
         return f"{self.name} ({self.quantity} {self.unit})"
 
 class MaterialRequest(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         REQUESTED = 'REQUESTED', 'Requested'
         APPROVED = 'APPROVED', 'Approved'

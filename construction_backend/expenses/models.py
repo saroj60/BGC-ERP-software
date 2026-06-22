@@ -4,6 +4,7 @@ from accounts.models import User
 from vehicles.models import Vehicle
 
 class Expense(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='expenses')
     vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True, related_name='expenses')
     category = models.CharField(max_length=100)

@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 
 class EmployeeProfile(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         ACTIVE = 'ACTIVE', 'Active'
         ON_LEAVE = 'ON_LEAVE', 'On Leave'
@@ -21,6 +22,7 @@ class EmployeeProfile(models.Model):
 
 
 class JobPosting(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         OPEN = 'OPEN', 'Open'
         CLOSED = 'CLOSED', 'Closed'
@@ -38,6 +40,7 @@ class JobPosting(models.Model):
 
 
 class Applicant(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         APPLIED = 'APPLIED', 'Applied'
         INTERVIEWING = 'INTERVIEWING', 'Interviewing'
@@ -58,6 +61,7 @@ class Applicant(models.Model):
 
 
 class TrainingProgram(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
     date = models.DateField()
@@ -69,6 +73,7 @@ class TrainingProgram(models.Model):
 
 
 class TrainingRecord(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     class Status(models.TextChoices):
         ENROLLED = 'ENROLLED', 'Enrolled'
         COMPLETED = 'COMPLETED', 'Completed'
@@ -85,6 +90,7 @@ class TrainingRecord(models.Model):
 
 
 class PerformanceReview(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     employee = models.ForeignKey(EmployeeProfile, on_delete=models.CASCADE, related_name='performance_reviews')
     reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='submitted_reviews')
     review_date = models.DateField(auto_now_add=True)

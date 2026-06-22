@@ -38,8 +38,8 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         return response
 
     def get_queryset(self):
-        queryset = Expense.objects.all()
         user = self.request.user
+        queryset = Expense.objects.filter(company=user.company) if user.company else Expense.objects.none()
 
         if user.is_admin():
             pass # See all
@@ -63,4 +63,4 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by=self.request.user, company=self.request.user.company)

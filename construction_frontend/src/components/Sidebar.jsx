@@ -4,6 +4,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 const Sidebar = ({ isOpen, onClose }) => {
     const role = localStorage.getItem('user_role');
     const email = localStorage.getItem('user_email') || `${role?.toLowerCase() || 'user'}@company.com`;
+    const companyName = localStorage.getItem('company_name') || 'Bhagat Grp of Construction';
+    const companyLogo = localStorage.getItem('company_logo');
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -51,6 +53,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
     const adminItems = [];
     if (role === 'ADMIN') {
+        adminItems.push({ name: 'SaaS Admin', path: '/saas-admin', icon: '🌐' });
         adminItems.push({ name: 'Employees', path: '/users', icon: '👥' });
         adminItems.push({ name: 'Inventory', path: '/inventory', icon: '📦' });
         adminItems.push({ name: 'HR Hub', path: '/hr', icon: '💼' });
@@ -114,7 +117,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                             fontFamily: "'Outfit', sans-serif",
                             letterSpacing: '-0.02em',
                         }}>
-                             Bhagat Grp of Construction
+                             {companyLogo && <img src={companyLogo} alt="Logo" style={{ height: '32px', maxWidth: '40px', objectFit: 'contain', borderRadius: '4px' }} />}
+                             {!companyLogo && <span>{companyName}</span>}
                         </div>
                         <div style={{
                             marginTop: '4px',

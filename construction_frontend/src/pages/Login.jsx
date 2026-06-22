@@ -26,6 +26,9 @@ const Login = () => {
                 localStorage.setItem('user_role', response.data.role);
                 localStorage.setItem('user_id', response.data.id);
                 localStorage.setItem('user_email', email);
+                if (response.data.company_name) localStorage.setItem('company_name', response.data.company_name);
+                if (response.data.company_logo) localStorage.setItem('company_logo', response.data.company_logo);
+                if (response.data.theme_color) localStorage.setItem('theme_color', response.data.theme_color);
             }
 
             navigate('/dashboard');

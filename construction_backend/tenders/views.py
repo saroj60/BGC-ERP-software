@@ -6,6 +6,10 @@ from .models import Tender, Bid
 from .serializers import TenderSerializer, TenderListSerializer, BidSerializer
 
 class TenderViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        user = self.request.user
+        return Tender.objects.filter(company=user.company).order_by('-issue_date') if user.company else Tender.objects.none()
+
     queryset = Tender.objects.all().order_by('-issue_date')
     permission_classes = [IsAuthenticated]
 
@@ -15,7 +19,7 @@ class TenderViewSet(viewsets.ModelViewSet):
         return TenderSerializer
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save(created_by=self.request.user, company=self.request.user.company)
 
     @action(detail=True, methods=['get'])
     def compare_bids(self, request, pk=None):
@@ -26,12 +30,16 @@ class TenderViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class BidViewSet(viewsets.ModelViewSet):
+    def perform_create(self, serializer):
+        serializer.save(company=self.request.user.company)
+
     queryset = Bid.objects.all().order_by('-submission_date')
     serializer_class = BidSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        user = self.request.user
+        queryset = Bid.objects.filter(company=user.company).order_by('-submission_date') if user.company else Bid.objects.none()
         tender_id = self.request.query_params.get('tender', None)
         if tender_id is not None:
             queryset = queryset.filter(tender_id=tender_id)

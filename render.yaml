@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: bgc-backend
+    env: python
+    rootDir: construction_backend
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn construction_backend.wsgi:application --bind 0.0.0.0:$PORT"
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bgc-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "bgc-backend.onrender.com,bgc-erp.onrender.com,localhost"
+      - key: GEMINI_API_KEY
+        sync: false
+
+  - type: web
+    name: bgc-frontend
+    env: static
+    rootDir: construction_frontend
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: "./dist"
+    plan: free
+    envVars:
+      - key: VITE_API_URL
+        value: "https://bgc-backend.onrender.com/api/"
+
+databases:
+  - name: bgc-db
+    plan: free
+    databaseName: bgc_production
+    user: bgc_user

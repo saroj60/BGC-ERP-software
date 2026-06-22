@@ -4,6 +4,7 @@ from projects.models import Project
 from .validators import validate_file_size
 
 class DailySiteReport(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reports')
     date = models.DateField()
     weather = models.CharField(max_length=100)
@@ -18,6 +19,7 @@ class DailySiteReport(models.Model):
         return f"Report - {self.project.name} - {self.date}"
 
 class ReportPhoto(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     report = models.ForeignKey(DailySiteReport, on_delete=models.CASCADE, related_name='photos')
     image = models.FileField(
         upload_to='site_reports/',
@@ -33,6 +35,7 @@ class ReportPhoto(models.Model):
         return f"Photo for {self.report}"
 
 class Worker(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='workers')
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=100) # e.g. Mason, Labor, Carpenter
@@ -43,6 +46,7 @@ class Worker(models.Model):
         return f"{self.name} ({self.role}) - {self.project.name}"
 
 class Attendance(models.Model):
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='attendance')
     date = models.DateField()
     worker = models.ForeignKey(Worker, on_delete=models.SET_NULL, null=True, blank=True, related_name='attendance_records')
